@@ -1,18 +1,95 @@
 ﻿class Program
 {
-    static void PrintValue(int val, string str, out int res, int opt = 1)
+    private int SomeClassValue = 5;
+
+    static string ConcatOutput(string title, int val = 1, params string[] words)
     {
-        Console.WriteLine("Some value " + val + str + opt);
+        string head = title + ": ";
+        foreach (var word in words) head += word + ", ";
+        return head;
+    }
+
+    static string PrintValue(int val, string str, out int res, ref int someValue, int opt = 1)
+    {
+        var result = "Some value " + val + str + opt;
+        Console.WriteLine(result);
+        val = val + 1;
+        someValue = opt + someValue + 2;
         res = opt + 1;
+        return res > 5 ? result : "";
+    }
+
+    static string PrintValue(int val, string str, out int res, ref int someValue,
+        double nextValue, int opt = 1)
+    {
+        var result = "Some value " + val + str + opt;
+        Console.WriteLine(result);
+        val = val + 1;
+        someValue = opt + someValue + 2;
+        res = opt + 1;
+        return res > 5 ? result : "";
+    }
+
+    static int Sum(int from, int to)
+    {
+        // var local = SomeClassValue;
+        if (from > to) return Sum(to, from);
+        if (from == to) return from;
+        return from + Sum(from + 1, to);
+    }
+
+    static int SumFor(int from, int to)
+    {
+        var result = 0;
+        for (var i = from; i <= to; i++)
+        {
+            result += i;
+        }
+
+        return result;
     }
 
     static void PrintValueShort() => Console.WriteLine("Some value");
 
+    static unsafe void Pointers()
+    {
+        int x = 42;
+        int* p = &x;
+        Console.WriteLine("Value of x: " + x);
+        Console.WriteLine("Value stored in the pointer p: " + *p);
+        *p = 24; // Modifying the value indirectly through the pointer
+        Console.WriteLine("New value of x: " + x);
+    }
 
     static void Main()
     {
+        Pointers();
+        int val1 = 1;
+        object boxed = val1; // boxing
+        val1 = (int) boxed; // unboxing
+        int? val = null;
+        // var test = val.Value;
+        int notNull = 0;
+        var copy = val.HasValue ? val.Value : 0;
+        var copy1 = val ?? 5;
+        var copy2 = notNull != 0 ? notNull : 7;
+        Console.WriteLine("Input some int...");
+        var stringInput = Console.ReadLine();
+        // var int1 = Convert.ToInt32(stringInput);
+        if (int.TryParse(stringInput, out var int1))
+            Console.WriteLine($"Input was valid, {int1}");
+        else Console.WriteLine("Input was not valid");
+        var title = "title";
+        var concat1 = ConcatOutput(title);
+        var concat2 = ConcatOutput("title", 1, "w1", "w2", "w3", "w4");
+        Sum(5, 10);
+        SumFor(5, 10);
         int i = 0;
-        PrintValue(val: 5, str: "string", out var x, 5);
+        var someNonRef = 5;
+        var intermediate = 1;
+        var result = PrintValue(someNonRef, str: "string", out var x, ref intermediate, 5);
+        var result2 =
+            PrintValue(someNonRef, str: "string", out var y, ref intermediate, 5, 5);
         Console.WriteLine(x);
         PrintValueShort();
         // for (int i = 0; i < 5; i++)
