@@ -64,22 +64,52 @@ public class Program
         // {
         //     Console.WriteLine("The file does not exist.");
         // }
-        int a = 0;
+        // some data 
+        Guid guid1 = Guid.Empty;
+        Guid guid = Guid.NewGuid();
+        string s = null;
+        var char1 = s?.ElementAtOrDefault(100);
+        int[] arr = null;
+        // if arr is null
+        // if index is out of range
+        // results in 0
+        var val = arr?.ElementAtOrDefault(3) ?? 0;
+        short a = 0;
         try
         {
-            a = Convert.ToInt32(Console.ReadLine());
+            s = Console.ReadLine();
+            if (s.Any(ch => !char.IsDigit(ch)))
+                throw new FormatException("Some exception");
+            short.TryParse(s, out a);
+            a = Convert.ToInt16(s);
         }
-        catch (Exception e)
+
+        catch (FormatException exception)
         {
-            Console.WriteLine(e.Message);
+            Console.WriteLine($"The input string is not a sequence of digits. {s}");
         }
-        
+        catch (OverflowException exception)
+        {
+            Console.WriteLine($"The number cannot fit in an Int16. {s}");
+        }
+        catch (Exception exception)
+        {
+            Console.WriteLine($"The input string is null. {s}");
+        }
+        finally
+        {
+            s = null;
+        }
+
         string filePath = "Text1.txt";
-        string[] lines = {"First line",
+        string[] lines =
+        {
+            "First line",
             "\r\n",
             "Second line",
             Environment.NewLine,
-            "Third line"};
+            "Third line"
+        };
         File.WriteAllLines(filePath, lines);
         string fileContents = "This is an example text.";
         File.AppendAllText(filePath, fileContents);
@@ -111,13 +141,10 @@ public class Program
 
     public static Person[] Deserialize()
     {
-        using (var fileStream =
-               new FileStream("Person.json",
-                   FileMode.OpenOrCreate))
-        {
-            return JsonSerializer // returns Person[]
-                .Deserialize<Person[]>(fileStream);
-        }
+        using var fileStream = new FileStream("Person.json",
+                FileMode.OpenOrCreate);
+        return JsonSerializer // returns Person[]
+            .Deserialize<Person[]>(fileStream);
     }
 
     private static void WorkWithFile()
