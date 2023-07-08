@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using System.Text.RegularExpressions;
+﻿using beetroot_csharp_106.Model;
 
 namespace beetroot_csharp_106;
 
@@ -7,6 +6,22 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        
+        var singleton = Singleton.Instance;
+        singleton.Id = 2;
+        var singleton2 = Singleton.Instance;
+        // using var fileStream = new FileStream("Person.json",
+        //     FileMode.OpenOrCreate);
+        var user = new User("Ivan", "Ivanov");
+        // user.SystemGuid = Guid.NewGuid();
+        var stringId = user.SystemGuid.ToString();
+        var user2 = new User(1, "user2", "user2", "user2", "user2");
+        Console.WriteLine(user.GetFullName());
+        Console.WriteLine(
+            User.GetFullNameStatic(user.FirstName, user.LastName));
+
+        GC.Collect();
+
         // string input = "The quick brown fox jumps over the lazy dog.";
         // string pattern = "fox";
         // Match match = Regex.Match(input, pattern);
@@ -142,7 +157,7 @@ public class Program
     public static Person[] Deserialize()
     {
         using var fileStream = new FileStream("Person.json",
-                FileMode.OpenOrCreate);
+            FileMode.OpenOrCreate);
         return JsonSerializer // returns Person[]
             .Deserialize<Person[]>(fileStream);
     }
