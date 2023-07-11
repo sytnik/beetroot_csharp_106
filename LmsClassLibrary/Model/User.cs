@@ -1,4 +1,4 @@
-﻿namespace beetroot_csharp_106.Model;
+﻿namespace LmsClassLibrary.Model;
 
 public class User
 {
@@ -15,6 +15,7 @@ public class User
     public string LastName { get; set; }
     public string Email { get; set; } = "default@mail.com";
     public string Password { get; set; }
+    public List<Course> Courses { get; set; } = new();
 
     public User()
     {
@@ -35,11 +36,11 @@ public class User
         Email = email;
         Password = password;
     }
-    
-    
+
+
     public string GetFullName() =>
         $"{FirstName} {LastName}";
-    
+
     public static string
         GetFullNameStatic(string firstName,
             string lastName) =>

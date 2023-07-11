@@ -1,4 +1,4 @@
-﻿namespace Test1;
+﻿namespace ConsoleApp;
 
     public class TestClass
     {

@@ -1,12 +1,28 @@
-﻿using beetroot_csharp_106.Model;
+﻿using LmsClassLibrary.Model;
 
-namespace beetroot_csharp_106;
+namespace ConsoleApp;
 
 public class Program
 {
     public static void Main(string[] args)
     {
-        
+        var course = new Course();
+        Console.WriteLine(course.ToString());
+        var course2 = new Course();
+        var course3 = course2;
+        var eq = course == course2;
+        var eq2 = course3.Equals(course2);
+        var eq3 = course.CourseEquals(course2);
+        var courseRecord = new CourseRecord();
+        Console.WriteLine(courseRecord.ToString());
+        courseRecord.Id = 5;
+        var courseRecord2 = new ShortCourseRecord();
+        var courseRecord3 = new ShortCourseRecord();
+        var recordEq = courseRecord2 == courseRecord3;
+        var recordEq2 = courseRecord2.Equals(courseRecord3);
+        Console.WriteLine(courseRecord2.ToString());
+        courseRecord2 = courseRecord2 with {Id = 5, Name = "Some Name"};
+        Console.WriteLine(courseRecord2.ToString());
         var singleton = Singleton.Instance;
         singleton.Id = 2;
         var singleton2 = Singleton.Instance;
@@ -16,10 +32,10 @@ public class Program
         // user.SystemGuid = Guid.NewGuid();
         var stringId = user.SystemGuid.ToString();
         var user2 = new User(1, "user2", "user2", "user2", "user2");
+        // user2.Id = 2;
         Console.WriteLine(user.GetFullName());
         Console.WriteLine(
             User.GetFullNameStatic(user.FirstName, user.LastName));
-
         GC.Collect();
 
         // string input = "The quick brown fox jumps over the lazy dog.";
