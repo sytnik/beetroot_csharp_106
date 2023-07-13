@@ -1,6 +1,6 @@
 ﻿namespace LmsClassLibrary.Model;
 
-public class User
+public sealed record User : EntityWithId
 {
     public User(string firstName, string lastName)
     {
@@ -10,7 +10,7 @@ public class User
 
     public const int IdIncrement = 1;
     public readonly Guid SystemGuid = Guid.NewGuid();
-    public int Id { get; set; } = 1;
+    // public int Id { get; set; } = 1;
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Email { get; set; } = "default@mail.com";

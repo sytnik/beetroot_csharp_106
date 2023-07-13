@@ -4,8 +4,32 @@ namespace ConsoleApp;
 
 public class Program
 {
+    public static void Print(IEnumerable<int> someData)
+        => Console.WriteLine(string.Join("***", someData));
+
     public static void Main(string[] args)
     {
+        var testclass1 = new TestClass {Id = 1, Name = "test1"};
+        var testclass2 = new TestClass {Id = 1, Name = "test1"};
+        var testclass3 = testclass2;
+
+        testclass1.Equals(null);
+        testclass1.Equals(testclass2);
+        testclass2.Equals(testclass3);
+        
+        
+        var data = new[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        var data1 = data.ToList();
+        var data2 = data.ToHashSet();
+        Print(data);
+        Print(data1);
+        Print(data2);
+
+
+        var submission = new Submission(7, "new submission");
+        var s1 = submission.DisplayContent();
+
+        var entityIdName = new EntityWithIdAndName(5, "somename");
         var course = new Course();
         Console.WriteLine(course.ToString());
         var course2 = new Course();
@@ -37,65 +61,6 @@ public class Program
         Console.WriteLine(
             User.GetFullNameStatic(user.FirstName, user.LastName));
         GC.Collect();
-
-        // string input = "The quick brown fox jumps over the lazy dog.";
-        // string pattern = "fox";
-        // Match match = Regex.Match(input, pattern);
-        // if (match.Success)
-        // {
-        //     Console.WriteLine("Found '{0}' at position {1}", match.Value, match.Index);
-        // }
-        // else Console.WriteLine("Not found");
-        // string input = "The quick brown fox jumps over the lazy dog.";
-        // string pattern = @"\b\w{4}\b";
-        // MatchCollection matches = Regex.Matches(input, pattern);
-        // foreach (Match match in matches)
-        // {
-        //     Console.WriteLine("Found '{0}' at position {1}", match.Value, match.Index);
-        // }
-        // string input = "The quick brown fox jumps over the lazy dog.";
-        // string pattern = @"\b\w{4}\b";
-        // string replacement = "someword";
-        // string result = Regex.Replace(input, pattern, replacement);
-        // Console.WriteLine(result);
-        // string input = "+38(050)12345";
-        // string input1 = "+38(050)1234567";
-        // string input2 = "+38(050)1234";
-        // string pattern = @"\+38\(0\d{2}\)\d{5,7}"; // +38(0xx)xxxxxxx
-        // // string pattern = @"\b\w{4}\b";
-        // bool isMatch = Regex.IsMatch(input, pattern);
-        // bool isMatch1 = Regex.IsMatch(input1, pattern);
-        // bool isMatch2 = Regex.IsMatch(input2, pattern);
-        // Console.WriteLine(isMatch);
-        // string i1 = "Іваненко І.І.";
-        // string i2 = "Iваненко Іван Іванович";
-        // int firstI = (int) i1[0];
-        // int secI = (int) i2[0];
-        // string pattern1 = @"^[А-ЩЬЮЯҐЄІЇ][а-щьюяґєії']+\s[А-ЩЬЮЯҐЄІЇ]\.[А-ЩЬЮЯҐЄІЇ]\.$"; // ^ - start of the string
-        // Regex regex = new Regex(pattern1);
-        // bool isMatch3 = regex.IsMatch(i1);
-        // bool isMatch4 = regex.IsMatch(i2);
-
-//         string email = "example@gmail.com";
-//         // var simplePattern = @"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b";
-//         string pattern = @"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$";
-//         Regex regex = new Regex(pattern);
-//         bool isMatch = regex.IsMatch(email);
-//         Console.WriteLine(isMatch); // виведе "True”
-//
-// Console.WriteLine();
-
-        // string filePath = "C:/example.txt";
-        // string p2 = "../../../1/Text.txt";
-        // if (File.Exists(p2))
-        // {
-        //     Console.WriteLine("The file exists.");
-        // }
-        // else
-        // {
-        //     Console.WriteLine("The file does not exist.");
-        // }
-        // some data 
         Guid guid1 = Guid.Empty;
         Guid guid = Guid.NewGuid();
         string s = null;

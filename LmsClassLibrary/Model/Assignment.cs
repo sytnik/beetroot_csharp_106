@@ -1,9 +1,9 @@
 ﻿namespace LmsClassLibrary.Model;
 
-public record Assignment
+public record Assignment : EntityWithIdAndName
 {
-    public int Id { get; set; }
-    public string Name { get; set; }
+    // public int Id { get; set; }
+    // public string Name { get; set; }
     public Module Module { get; set; }
     public List<Submission> Submissions { get; set; } = new();
 
