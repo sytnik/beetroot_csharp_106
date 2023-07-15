@@ -2,8 +2,6 @@
 
 public record Course : EntityWithIdAndName
 {
-    // public int Id { get; set; } = 1;
-    // public string Name { get; set; } = "Default Name";
     public string Description { get; set; } = "Default Description";
     public User Teacher { get; set; }
     public List<Module> Modules { get; set; } = new();

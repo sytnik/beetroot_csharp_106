@@ -7,6 +7,6 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="..\LmsClassLibrary\LmsClassLibrary.csproj"/>
+        <ProjectReference Include="..\LmsClassLibrary\LmsClassLibrary.csproj" />
     </ItemGroup>
 </Project>

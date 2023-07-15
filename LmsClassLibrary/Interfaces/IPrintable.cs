@@ -1,6 +1,6 @@
 ﻿namespace LmsClassLibrary.Interfaces;
 
-public interface IPrintable
+public interface IPrintable : IHashable
 {
     public string DisplayContent();
 }

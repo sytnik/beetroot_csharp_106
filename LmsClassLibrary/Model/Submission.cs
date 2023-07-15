@@ -1,10 +1,7 @@
-﻿using LmsClassLibrary.Interfaces;
-
-namespace LmsClassLibrary.Model;
+﻿namespace LmsClassLibrary.Model;
 
 public record Submission : EntityWithId
 {
-    // public int Id { get; set; }
     public string Text { get; set; }
     public User User { get; set; }
     public Assignment Assignment { get; set; }
@@ -19,10 +16,10 @@ public record Submission : EntityWithId
         Text = text;
     }
 
-    public override string DisplayContent()
+    public string DisplayContent()
         => $"*This Submission:\r\nId: {Id}\r\nText: {Text}\r\nUser: {User}\r\nAssignment: {Assignment}";
     
     
-    public override string DisplayContent(string someText)
+    public string DisplayContent(string someText)
         => $"*This Submission:\r\nId: {Id}\r\nText: {Text}\r\nUser: {User}\r\nAssignment: {Assignment}\r\nsomeText: {someText}";
 }

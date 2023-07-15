@@ -12,23 +12,17 @@ public class Program
         var testclass1 = new TestClass {Id = 1, Name = "test1"};
         var testclass2 = new TestClass {Id = 1, Name = "test1"};
         var testclass3 = testclass2;
-
         testclass1.Equals(null);
         testclass1.Equals(testclass2);
         testclass2.Equals(testclass3);
-        
-        
         var data = new[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         var data1 = data.ToList();
         var data2 = data.ToHashSet();
         Print(data);
         Print(data1);
         Print(data2);
-
-
         var submission = new Submission(7, "new submission");
         var s1 = submission.DisplayContent();
-
         var entityIdName = new EntityWithIdAndName(5, "somename");
         var course = new Course();
         Console.WriteLine(course.ToString());

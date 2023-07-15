@@ -10,7 +10,6 @@ public sealed record User : EntityWithId
 
     public const int IdIncrement = 1;
     public readonly Guid SystemGuid = Guid.NewGuid();
-    // public int Id { get; set; } = 1;
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Email { get; set; } = "default@mail.com";
@@ -36,7 +35,6 @@ public sealed record User : EntityWithId
         Email = email;
         Password = password;
     }
-
 
     public string GetFullName() =>
         $"{FirstName} {LastName}";

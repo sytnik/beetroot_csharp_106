@@ -2,7 +2,7 @@
 
 namespace LmsClassLibrary.Model;
 
-public record EntityWithId : IPrintable
+public abstract record EntityWithId : IPrintable
 {
     public EntityWithId()
     {
@@ -14,7 +14,12 @@ public record EntityWithId : IPrintable
 
     public virtual string DisplayContent() =>
         $"*This EntityWithId:\r\nId: {Id}";
-    
+
     public virtual string DisplayContent(string someText) =>
         $"*This EntityWithId:\r\nId: {Id}, someText: {someText}";
+
+    public int GetHash()
+    {
+        throw new NotImplementedException();
+    }
 }

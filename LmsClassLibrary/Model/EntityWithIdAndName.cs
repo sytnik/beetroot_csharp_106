@@ -1,15 +1,11 @@
-﻿using LmsClassLibrary.Interfaces;
-
-namespace LmsClassLibrary.Model;
+﻿namespace LmsClassLibrary.Model;
 
 public record EntityWithIdAndName : EntityWithId
 {
-    public EntityWithIdAndName(int id, string name) : base(id) => Name = name;
-
-    public EntityWithIdAndName(string name)
-    {
+    public EntityWithIdAndName(int id, string name) : base(id) =>
         Name = name;
-    }
+
+    public EntityWithIdAndName(string name) => Name = name;
 
     public EntityWithIdAndName()
     {
