@@ -1,4 +1,6 @@
-﻿using LmsClassLibrary.Model;
+﻿using System.Collections;
+using System.Drawing;
+using LmsClassLibrary.Model;
 
 namespace ConsoleApp;
 
@@ -9,6 +11,30 @@ public class Program
 
     public static void Main(string[] args)
     {
+        var coll = new MyCollection();
+        // coll.data[0] = 1;
+        coll[0] = 1;
+        var val1 = coll[1];
+        ArrayList list1 = new ArrayList {1, 2, 3, "str", null};
+        var elem3 = (int) list1[2];
+        List<object> list2 = new List<object> {1, 2, 3, "str", null};
+        List<int> strlist2 = new List<int> {1, 2, 3};
+        var elem4 = strlist2[2];
+        var str = new TestStruct();
+        var p = new Point(1, 1);
+        var p2 = new Point(1, 1);
+        var mp = new MyPoint(1, 1, "1");
+        var mp2 = new MyPoint(1, 1, "1");
+        var p3 = mp + mp2;
+        var dt = DateTime.Now;
+        var str2 = str;
+        object o = str2;
+        int.TryParse(o.ToString(), out var i3);
+        int i = o is int ? (int) o : -1;
+        int i2 = o is int i1 ? i1 : -1;
+        Console.WriteLine(str2);
+        Console.WriteLine(str2.ToString());
+        Console.WriteLine($"{str2}");
         var testclass1 = new TestClass {Id = 1, Name = "test1"};
         var testclass2 = new TestClass {Id = 1, Name = "test1"};
         var testclass3 = testclass2;
