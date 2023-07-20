@@ -1,6 +1,6 @@
 ﻿namespace LmsClassLibrary;
 
-public class Global
+public class Usings
 {
     
 }
