@@ -1,106 +1,68 @@
-﻿namespace ConsoleApp;
+﻿using System.Diagnostics;
+using System.Drawing;
+using System.Timers;
+using Timer = System.Threading.Timer;
+
+namespace ConsoleApp;
 
 public class Program
 {
-    public static void Swap<T>(ref T val1, ref T val2) where T : class
+    // Define a delegate
+    public delegate void MyDelegate(string msg);
+
+    public static void Main()
     {
-        T temp = val1;
-        val1 = val2;
-        val2 = temp;
-    }
-
-
-    public static void PrintGenericCollection<T>(IEnumerable<T> src) =>
-        Console.WriteLine(string.Join(", ", src));
-
-    public static IEnumerable<T> MakeCollectionFromParams<T>(params T[] src) =>
-        new List<T>(src);
-
-    public static void Main(string[] args)
-    {
-        var list = new List<int> {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        list.Add(1);
-        list.AddRange(list);
-        list.Remove(1);
-        list.RemoveAt(0);
-        list.RemoveRange(0, 2);
-        list.RemoveAll(x => x > 4);
+        var watch = new Stopwatch();
+        watch.Start();
+        // Create an instance of the delegate class.
+        Console.WriteLine("Enter your name: ");
+        watch.Stop();
+        Console.WriteLine("Elapsed time: {0}", watch.Elapsed);
+        // Call the delegate.
+        var list = new List<int> {1, 2, 3, 4, 5};
+        list.Clear();
+        list.Add(6);
+        list.AddRange(new[] {1, 2, 3, 4, 5});
         var contains = list.Contains(1);
-
-        // var dict1 = new Dictionary<int, string>();
-        // dict1.Add(1, "one");
-        // dict1.Add(2, "two");
-        // dict1.Add(3, "three");
-        var dict = new Dictionary<int, string>
-        {
-            {1, "one"},
-            {2, "two"},
-            {3, "three"}
-        };
-        var containsKey = dict.ContainsKey(1);
-        var containsValue = dict.ContainsValue("one");
-        var keys = dict.Keys;
-        var values = dict.Values;
-        var count = dict.Count;
-        dict.Remove(1);
-        dict.Add(4, "four");
-        var try1 = dict.TryAdd(5, "five");
-        var try2 = dict.TryAdd(5, "five");
-        var tryval = dict.TryGetValue(5, out var val);
-        var tryval1 = dict.TryGetValue(7, out var val1);
-        var queue = new Queue<int>();
-        queue.Enqueue(1);
-        queue.Enqueue(2);
-        queue.Enqueue(3);
-        var dequeue = queue.Dequeue();
-        var peek = queue.Peek();
-        var stack = new Stack<int>();
-        stack.Push(1);
-        stack.Push(2);
-        stack.Push(3);
-        var pop = stack.Pop();
-        var peek1 = stack.Peek();
-        var hashset = new HashSet<int>
-        {
-            1,
-            2,
-            3,
-            4,
-            5,
-            6
-        };
-        var hashset1 = new HashSet<int>
-        {
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-        };
-        var intersect = hashset.Intersect(hashset1).ToHashSet();
-        // hashset.IntersectWith(hashset1);
-        var union = hashset.Union(hashset1).ToHashSet();
-        // hashset.UnionWith(hashset1);
-        var except = hashset.Except(hashset1).ToList();
-        hashset.ExceptWith(hashset1);
-        var contains1 = hashset.Contains(1);
-        var contains2 = hashset.Contains(4);
-        var count1 = hashset.Count;
-
-        var linkedList = new LinkedList<int>();
-        linkedList.AddFirst(1);
-        linkedList.AddLast(2);
-        linkedList.AddLast(3);
-        linkedList.AddFirst(11);
-        linkedList.AddLast(4);
-        linkedList.AddLast(5);
-        linkedList.AddAfter(linkedList.Find(3), 10);
-        linkedList.AddBefore(linkedList.Find(3), 20);
-        linkedList.Remove(3);
-        linkedList.RemoveFirst();
-        linkedList.RemoveLast();
-        linkedList.Remove(11);
-        
+        var find = list.Find(x => x == 2);
+        var findAll = list.FindAll(x => x > 2 && x < 4);
+        var findIndex = list.FindIndex(x => x == 4);
+        var findLast = list.FindLast(x => x == 4);
+        var findLastIndex = list.FindLastIndex(x => x == 4);
+        var indexOf = list.IndexOf(4);
+        list.Insert(6, list.Count);
+        list.InsertRange(4, new[] {1, 2, 3, 4, 5});
+        list.Remove(4);
+        list.RemoveAll(x => x == 4);
+        list.RemoveAt(4);
+        list.RemoveRange(4, 2);
+        list.Sort();
+        var array = list.ToArray();
+        list.TrimExcess();
     }
+
+    // public static void Main()
+    // {
+    //     // Create an array of Point structures.
+    //     Point[] points =
+    //     {
+    //         new Point(100, 200),
+    //         new Point(150, 250), new Point(250, 375),
+    //         new Point(275, 395), new Point(295, 450)
+    //     };
+    //
+    //     // Define the Predicate<T> delegate.
+    //     Predicate<Point> predicate = FindPoints;
+    //
+    //     // Find the first Point structure for which X times Y
+    //     // is greater than 100000.
+    //     Point first = Array.Find(points, predicate);
+    //     var firstPoint = Array.Find(points, point => point.X * point.Y > 100000);
+    //     var firstPoint2 = points.First(point => point.X * point.Y > 100000);
+    //
+    //     // Display the first structure found.
+    //     Console.WriteLine("Found: X = {0}, Y = {1}", first.X, first.Y);
+    // }
+
+    private static bool FindPoints(Point obj) => obj.X * obj.Y > 100000;
 }
