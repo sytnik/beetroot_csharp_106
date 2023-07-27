@@ -65,4 +65,7 @@ public class FullTimeVersion
     public int DisciplineId { get; set; }
 
     public int DepartmentId { get; set; }
+    public Cycle Cycle { get; set; }
+    public Discipline Discipline { get; set; }
+    public Department Department { get; set; }
 }

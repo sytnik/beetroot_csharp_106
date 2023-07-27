@@ -13,4 +13,6 @@ public class CalendarBody
     public int YearId { get; set; }
 
     public int CalendarId { get; set; }
+    public Year Year { get; set; }
+    public Calendar Calendar { get; set; }
 }

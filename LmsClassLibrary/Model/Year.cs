@@ -6,5 +6,5 @@ public class Year
 
     public int Number { get; set; }
 
-    public string Name { get; set; } = null!;
+    public string Name { get; set; }
 }

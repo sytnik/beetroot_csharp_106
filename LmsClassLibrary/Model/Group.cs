@@ -4,7 +4,7 @@ public class Group
 {
     public int Id { get; set; }
 
-    public string Name { get; set; } = null!;
+    public string Name { get; set; }
 
     public int Course { get; set; }
 
@@ -19,4 +19,7 @@ public class Group
     public int PropositionId { get; set; }
 
     public int CurrentYearId { get; set; }
+    public Year StartYear { get; set; }
+    public Year CurrentYear { get; set; }
+    public Proposition Proposition { get; set; }
 }
