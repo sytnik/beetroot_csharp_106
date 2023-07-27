@@ -12,6 +12,9 @@ public class Program
 
     public static void Main()
     {
+        var dateUser = new DateUser(1994, 2, 1);
+        var dateTime = new DateTime(1994, 2, 1);
+        var dateOnly = new DateOnly(1994, 2, 1);
         var watch = new Stopwatch();
         watch.Start();
         // Create an instance of the delegate class.
