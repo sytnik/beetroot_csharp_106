@@ -37,4 +37,22 @@ public static class Sample
         var faculties = facultyFaker.Generate(100);
         return new StructureDto(faculties);
     }
+
+    public static FacultyIdNameDto[] FacultiesWithIdMoreThan(this StructureDto dto, int id) =>
+        dto
+            .Faculties
+            .Where(faculty => faculty.Id > id)
+            .OrderBy(faculty => faculty.Id)
+            .ThenBy(faculty => faculty.Name)
+            .Select(faculty => new FacultyIdNameDto(
+                faculty.Id,
+                faculty.Name,
+                faculty.Departments.Select(department =>
+                        new DepartmentIdNameSlugDto(
+                            department.Id,
+                            department.Name,
+                            department.Slug))
+                    .ToArray()
+            ))
+            .ToArray();
 }
