@@ -16,7 +16,7 @@ public static class Sample
     public static bool OurIsNullOrEmpty(this string value)
         => string.IsNullOrEmpty(value);
 
-    public static StructureDto InitData()
+    public static StructureDto InitData(int facultyCount)
     {
         var departmentFaker = new Faker<Department>()
             .RuleFor(d => d.Id, faker => faker.IndexFaker + 1)
@@ -34,7 +34,7 @@ public static class Sample
             .RuleFor(faculty => faculty.Info, faker => faker.Lorem.Paragraph())
             .RuleFor(faculty => faculty.Departments, faker =>
                 faker.PickRandom(departments, faker.Random.Int(3, 10)).ToList());
-        var faculties = facultyFaker.Generate(100);
+        var faculties = facultyFaker.Generate(facultyCount);
         return new StructureDto(faculties);
     }
 
