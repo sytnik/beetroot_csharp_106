@@ -4,7 +4,7 @@ using LmsClassLibrary.Util;
 
 namespace LmsClassLibrary.Dto;
 
-[JsonSerializable(typeof(StructureDto))]
+// [JsonSerializable(typeof(StructureDto))]
 public class StructureDto
 {
     public StructureDto(List<Faculty> faculties)
@@ -17,7 +17,11 @@ public class StructureDto
         Faculties = Sample.InitData(count).Faculties;
     }
 
-    [JsonIgnore]
+    public StructureDto()
+    {
+    }
+
+    // [JsonIgnore]
     public List<Faculty> Faculties { get; set; }
     
     private List<Faculty> PrivateFaculties { get; set; }
