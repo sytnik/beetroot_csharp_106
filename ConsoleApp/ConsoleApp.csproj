@@ -10,6 +10,13 @@
         <ProjectReference Include="..\LmsClassLibrary\LmsClassLibrary.csproj" />
     </ItemGroup>
     <ItemGroup>
+      <PackageReference Include="CsvHelper" Version="30.0.1" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+      <PackageReference Include="NPOI" Version="2.6.1" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Update="groups.xls">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 </Project>
