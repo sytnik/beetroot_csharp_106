@@ -1,5 +1,8 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Globalization;
+using System.Net.Http.Json;
+using System.Text;
 using System.Xml.Serialization;
 using CsvHelper;
 using LmsClassLibrary.Dto;
@@ -10,8 +13,132 @@ namespace ConsoleApp;
 
 public class Program
 {
-    public static void Main()
+    public static async Task PrintCatFacts()
     {
+        try
+        {
+            // long way
+            var client = new HttpClient();
+            var response = await client.GetAsync("https://cat-fact.herokuapp.com/facts");
+            var content = await response.Content.ReadAsStringAsync();
+            var catFacts = JsonConvert.DeserializeObject<CatFactsModel[]>(content);
+            // short way
+            var catFacts2 = await SysTextJson.DeserializeAsync<CatFactsModel[]>
+                (await new HttpClient().GetStreamAsync("https://cat-fact.herokuapp.com/facts"));
+            // even shorter way
+            var catFacts3 = await new HttpClient()
+                .GetFromJsonAsync<CatFactsModel[]>("https://cat-fact.herokuapp.com/facts");
+            var dtos = catFacts3
+                .Select(fact =>
+                    new CatFactDTO(DateOnly.FromDateTime(fact.createdAt),
+                        fact.text)).ToArray();
+            foreach (var dto in dtos)
+            {
+                Console.WriteLine(dto);
+            }
+        }
+        catch (Exception exception)
+        {
+            Console.WriteLine(exception.Message);
+        }
+    }
+
+
+    static async Task GetResource()
+    {
+        // Створюємо екземпляр HttpClient
+        using var httpClient = new HttpClient();
+        // Визначаємо URL веб-сервісу
+        string url = "https://jsonplaceholder.typicode.com/posts/1";
+        try
+        {
+            // Надсилаємо GET-запит до веб-сервісу
+            HttpResponseMessage response = await httpClient.GetAsync(url);
+            // Переконуємося, що запит успішний
+            response.EnsureSuccessStatusCode();
+            // Отримуємо вміст відповіді як рядок
+            string content = await response.Content.ReadAsStringAsync();
+            // Виводимо вміст відповіді
+            Console.WriteLine(content);
+        }
+        catch (HttpRequestException e)
+        {
+            Console.WriteLine($"Error: {e.Message}");
+        }
+    }
+
+    static async Task SomeMethod()
+    {
+        using (var cts = new CancellationTokenSource())
+        {
+            // Запускаємо довготривалу операцію
+            var longRunningTask = LongRunningOperationAsync(cts.Token);
+
+            // Чекаємо 2 секунди
+            await Task.Delay(2000);
+
+            // Скасовуємо операцію
+            cts.Cancel();
+
+            try
+            {
+                await longRunningTask;
+            }
+            catch (OperationCanceledException)
+            {
+                Console.WriteLine("Operation was canceled.");
+            }
+        }
+    }
+
+    static async Task LongRunningOperationAsync(CancellationToken cancellationToken)
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            // Перевіряємо, чи операцію було скасовано
+            cancellationToken.ThrowIfCancellationRequested();
+            Console.WriteLine($"Iteration {i + 1}");
+            await Task.Delay(1000);
+        }
+    }
+
+    public static async Task Main()
+    {
+        await PrintCatFacts();
+        await GetResource();
+        await SomeMethod();
+        // List<int> numbers = new List<int> {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+        Console.OutputEncoding = Encoding.UTF8;
+        // Parallel.ForEach(numbers, number =>
+        // {
+        //     Console.WriteLine($"Обробка числа {number} у потоці" +
+        //                       $" {Thread.CurrentThread.ManagedThreadId}");
+        // });
+        List<int> numbers = new List<int> {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+        // Створення безпечної для потоків колекції для зберігання квадратів чисел
+        ConcurrentBag<int> squares = new ConcurrentBag<int>();
+
+        // Виконання паралельних операцій на кожному елементі колекції numbers
+        Parallel.ForEach(numbers, number =>
+        {
+            Console.WriteLine($"Обробка числа {number} на потоці {Task.CurrentId}");
+            int square = number * number;
+            squares.Add(square);
+        });
+
+        Console.WriteLine("Квадрати чисел:");
+        // Order()
+        foreach (int square in squares.OrderBy(num => num))
+        {
+            Console.WriteLine(square);
+        }
+
+
+        List<int> numbers1 = new List<int> {23, 12, 45, 67, 89, 30, 5, 14};
+        var evenNumbers = numbers1.AsParallel().Where(n => n % 2 == 0).ToList();
+
+
         var faculties = InitData(100);
         var departments = faculties.FacultiesWithIdMoreThan(50);
         // ToXml(faculties, "structureDto.xml");
