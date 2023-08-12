@@ -2,6 +2,7 @@
 
 public class Proposition
 {
+    public int Id { get; set; }
     public int EduPropositionId { get; set; }
 
     public string EduSpan { get; set; }

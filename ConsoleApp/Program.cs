@@ -6,6 +6,8 @@ using System.Text;
 using System.Xml.Serialization;
 using CsvHelper;
 using LmsClassLibrary.Dto;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using SysTextJson = System.Text.Json.JsonSerializer;
 
@@ -13,7 +15,76 @@ namespace ConsoleApp;
 
 public class Program
 {
-    public static async Task PrintCatFacts()
+    public static ServiceProvider ConfigureServices()
+    {
+        var collection = new ServiceCollection();
+        collection.AddDbContext<TestAppContext>
+            (builder => builder.UseInMemoryDatabase("TestDb"));
+        return collection.BuildServiceProvider();
+    }
+
+    public static async Task Main()
+    {
+        // init data
+        var provider = ConfigureServices();
+        var context = provider.GetService<TestAppContext>();
+        var dto = InitData(100);
+        // save faculties
+        var faculties1 = dto.Faculties;
+        await context.Faculties.AddRangeAsync(faculties1);
+        // and departments
+        var departments1 = faculties1
+            .SelectMany(faculty => faculty.Departments)
+            .Distinct()
+            .ToList();
+        await context.Departments.AddRangeAsync(departments1);
+        await context.SaveChangesAsync();
+        // retrieve faculties
+        var faculties3 = await context.Faculties.ToListAsync();
+        await PrintCatFacts();
+        await GetResource("https://jsonplaceholder.typicode.com/posts/1");
+        await SomeMethod();
+        // List<int> numbers = new List<int> {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+        Console.OutputEncoding = Encoding.UTF8;
+        List<int> numbers = new List<int> {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+        // Створення безпечної для потоків колекції для зберігання квадратів чисел
+        ConcurrentBag<int> squares = new ConcurrentBag<int>();
+
+        // Виконання паралельних операцій на кожному елементі колекції numbers
+        Parallel.ForEach(numbers, number =>
+        {
+            Console.WriteLine($"Обробка числа {number} на потоці {Task.CurrentId}");
+            int square = number * number;
+            squares.Add(square);
+        });
+        Console.WriteLine("Квадрати чисел:");
+        foreach (int square in squares.OrderBy(num => num))
+        {
+            Console.WriteLine(square);
+        }
+
+        List<int> numbers1 = new List<int> {23, 12, 45, 67, 89, 30, 5, 14};
+        var evenNumbers = numbers1.AsParallel().Where(n => n % 2 == 0).ToList();
+        var faculties = InitData(100);
+        var departments = faculties.FacultiesWithIdMoreThan(50);
+        ToJsonSystemText(faculties, "structureDto1.json");
+        var faculties2 = FromJsonSystemText<StructureDto>("structureDto1.json");
+        var allDepartments = faculties2.FacultiesWithIdMoreThan(0)
+            .SelectMany(idNameDto => idNameDto.Departments).ToArray();
+        WriteToCsv("departments.csv", allDepartments);
+        var departments2 = GetFromCsv("departments.csv");
+        var stopwatch = Stopwatch.StartNew();
+        var groups = ExcelTask.ParseGroups();
+        stopwatch.Stop();
+        var st1 = $"Elapsed time 1: {stopwatch.Elapsed.Milliseconds}";
+        stopwatch.Restart();
+        var groups2 = ExcelTask.ParseGroupsParallel();
+        stopwatch.Stop();
+        var st2 = $"Elapsed time 2: {stopwatch.Elapsed.Milliseconds}";
+    }
+
+    public static async Task<CatFactDTO[]> PrintCatFacts()
     {
         try
         {
@@ -36,20 +107,22 @@ public class Program
             {
                 Console.WriteLine(dto);
             }
+
+            return dtos;
         }
         catch (Exception exception)
         {
             Console.WriteLine(exception.Message);
+            return Array.Empty<CatFactDTO>();
         }
     }
 
 
-    static async Task GetResource()
+    public static async Task<string> GetResource(string url)
     {
         // Створюємо екземпляр HttpClient
         using var httpClient = new HttpClient();
         // Визначаємо URL веб-сервісу
-        string url = "https://jsonplaceholder.typicode.com/posts/1";
         try
         {
             // Надсилаємо GET-запит до веб-сервісу
@@ -60,10 +133,13 @@ public class Program
             string content = await response.Content.ReadAsStringAsync();
             // Виводимо вміст відповіді
             Console.WriteLine(content);
+            return content;
         }
-        catch (HttpRequestException e)
+        catch (HttpRequestException exception)
         {
-            Console.WriteLine($"Error: {e.Message}");
+            var error = $"Error: {exception.Message}";
+            Console.WriteLine(error);
+            return error;
         }
     }
 
@@ -100,66 +176,6 @@ public class Program
             Console.WriteLine($"Iteration {i + 1}");
             await Task.Delay(1000);
         }
-    }
-
-    public static async Task Main()
-    {
-        await PrintCatFacts();
-        await GetResource();
-        await SomeMethod();
-        // List<int> numbers = new List<int> {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
-        Console.OutputEncoding = Encoding.UTF8;
-        // Parallel.ForEach(numbers, number =>
-        // {
-        //     Console.WriteLine($"Обробка числа {number} у потоці" +
-        //                       $" {Thread.CurrentThread.ManagedThreadId}");
-        // });
-        List<int> numbers = new List<int> {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-
-        // Створення безпечної для потоків колекції для зберігання квадратів чисел
-        ConcurrentBag<int> squares = new ConcurrentBag<int>();
-
-        // Виконання паралельних операцій на кожному елементі колекції numbers
-        Parallel.ForEach(numbers, number =>
-        {
-            Console.WriteLine($"Обробка числа {number} на потоці {Task.CurrentId}");
-            int square = number * number;
-            squares.Add(square);
-        });
-
-        Console.WriteLine("Квадрати чисел:");
-        // Order()
-        foreach (int square in squares.OrderBy(num => num))
-        {
-            Console.WriteLine(square);
-        }
-
-
-        List<int> numbers1 = new List<int> {23, 12, 45, 67, 89, 30, 5, 14};
-        var evenNumbers = numbers1.AsParallel().Where(n => n % 2 == 0).ToList();
-
-
-        var faculties = InitData(100);
-        var departments = faculties.FacultiesWithIdMoreThan(50);
-        // ToXml(faculties, "structureDto.xml");
-        // ToXml(departments, "departments.xml");
-        // var faculties2 = FromXml<StructureDto>("structureDto.xml");
-        // var departments2 =
-        //     FromXml<FacultyIdNameDto[]>("departments.xml");
-        ToJsonSystemText(faculties, "structureDto1.json");
-        var faculties2 = FromJsonSystemText<StructureDto>("structureDto1.json");
-        var allDepartments = faculties2.FacultiesWithIdMoreThan(0)
-            .SelectMany(idNameDto => idNameDto.Departments).ToArray();
-        WriteToCsv("departments.csv", allDepartments);
-        var departments2 = GetFromCsv("departments.csv");
-        var stopwatch = Stopwatch.StartNew();
-        var groups = ExcelTask.ParseGroups();
-        stopwatch.Stop();
-        var st1 = $"Elapsed time 1: {stopwatch.Elapsed.Milliseconds}";
-        stopwatch.Restart();
-        var groups2 = ExcelTask.ParseGroupsParallel();
-        stopwatch.Stop();
-        var st2 = $"Elapsed time 2: {stopwatch.Elapsed.Milliseconds}";
     }
 
     public static void ToXml<T>(T data, string fileName)
