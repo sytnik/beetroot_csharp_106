@@ -37,10 +37,11 @@ public class Program
             .SelectMany(faculty => faculty.Departments)
             .Distinct()
             .ToList();
-        await context.Departments.AddRangeAsync(departments1);
+        // await context.Departments.AddRangeAsync(departments1);
         await context.SaveChangesAsync();
         // retrieve faculties
         var faculties3 = await context.Faculties.ToListAsync();
+        var departments3 = await context.Departments.ToListAsync();
         await PrintCatFacts();
         await GetResource("https://jsonplaceholder.typicode.com/posts/1");
         await SomeMethod();
