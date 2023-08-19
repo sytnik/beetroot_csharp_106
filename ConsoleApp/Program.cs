@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 using CsvHelper;
 using LmsClassLibrary.Dto;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using SysTextJson = System.Text.Json.JsonSerializer;
@@ -17,9 +18,14 @@ public class Program
 {
     public static ServiceProvider ConfigureServices()
     {
+        var configuration = new ConfigurationBuilder()
+            .SetBasePath(basePath: Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .Build();
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
         var collection = new ServiceCollection();
-        collection.AddDbContext<TestAppContext>
-            (builder => builder.UseInMemoryDatabase("TestDb"));
+        collection.AddDbContext<EposContext>
+            (builder => builder.UseSqlServer(connectionString));
         return collection.BuildServiceProvider();
     }
 
@@ -27,62 +33,11 @@ public class Program
     {
         // init data
         var provider = ConfigureServices();
-        var context = provider.GetService<TestAppContext>();
-        var dto = InitData(100);
-        // save faculties
-        var faculties1 = dto.Faculties;
-        await context.Faculties.AddRangeAsync(faculties1);
-        // and departments
-        var departments1 = faculties1
-            .SelectMany(faculty => faculty.Departments)
-            .Distinct()
-            .ToList();
-        // await context.Departments.AddRangeAsync(departments1);
-        await context.SaveChangesAsync();
-        // retrieve faculties
-        var faculties3 = await context.Faculties.ToListAsync();
-        var departments3 = await context.Departments.ToListAsync();
-        await PrintCatFacts();
-        await GetResource("https://jsonplaceholder.typicode.com/posts/1");
-        await SomeMethod();
-        // List<int> numbers = new List<int> {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
-        Console.OutputEncoding = Encoding.UTF8;
-        List<int> numbers = new List<int> {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-
-        // Створення безпечної для потоків колекції для зберігання квадратів чисел
-        ConcurrentBag<int> squares = new ConcurrentBag<int>();
-
-        // Виконання паралельних операцій на кожному елементі колекції numbers
-        Parallel.ForEach(numbers, number =>
-        {
-            Console.WriteLine($"Обробка числа {number} на потоці {Task.CurrentId}");
-            int square = number * number;
-            squares.Add(square);
-        });
-        Console.WriteLine("Квадрати чисел:");
-        foreach (int square in squares.OrderBy(num => num))
-        {
-            Console.WriteLine(square);
-        }
-
-        List<int> numbers1 = new List<int> {23, 12, 45, 67, 89, 30, 5, 14};
-        var evenNumbers = numbers1.AsParallel().Where(n => n % 2 == 0).ToList();
-        var faculties = InitData(100);
-        var departments = faculties.FacultiesWithIdMoreThan(50);
-        ToJsonSystemText(faculties, "structureDto1.json");
-        var faculties2 = FromJsonSystemText<StructureDto>("structureDto1.json");
-        var allDepartments = faculties2.FacultiesWithIdMoreThan(0)
-            .SelectMany(idNameDto => idNameDto.Departments).ToArray();
-        WriteToCsv("departments.csv", allDepartments);
-        var departments2 = GetFromCsv("departments.csv");
-        var stopwatch = Stopwatch.StartNew();
-        var groups = ExcelTask.ParseGroups();
-        stopwatch.Stop();
-        var st1 = $"Elapsed time 1: {stopwatch.Elapsed.Milliseconds}";
-        stopwatch.Restart();
-        var groups2 = ExcelTask.ParseGroupsParallel();
-        stopwatch.Stop();
-        var st2 = $"Elapsed time 2: {stopwatch.Elapsed.Milliseconds}";
+        var context = provider.GetService<EposContext>();
+        var faculties = await context.Faculty
+            .Include(faculty => faculty.Departments)
+            // .ThenInclude(department => department.Propositions)
+            .ToListAsync();
     }
 
     public static async Task<CatFactDTO[]> PrintCatFacts()

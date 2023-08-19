@@ -1,9 +1,10 @@
-﻿namespace LmsClassLibrary.Model;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace LmsClassLibrary.Model;
 
 public class Proposition
 {
-    public int Id { get; set; }
-    public int EduPropositionId { get; set; }
+    [Key] public int EduPropositionId { get; set; }
 
     public string EduSpan { get; set; }
 
