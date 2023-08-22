@@ -34,10 +34,31 @@ public class Program
         // init data
         var provider = ConfigureServices();
         var context = provider.GetService<EposContext>();
-        var faculties = await context.Faculty
+        //add data
+        // var newFaculty = new Faculty(100, "Факультет інформаційних технологій");
+        // await context.Faculty.AddAsync(newFaculty);
+        //update data
+        // var facultyFirst = await context.Faculty
+        //     .FirstOrDefaultAsync(faculty1 => faculty1.Id == 101);
+        var faculty = await context.Faculty.FindAsync(100);
+        var newFaculty = faculty with {Id = 101};
+        faculty.Name = "ФІТ";
+        context.Faculty.Update(faculty);
+        // change pk
+        context.Entry(faculty).CurrentValues.SetValues(newFaculty);
+        await context.SaveChangesAsync();
+        var faculties = await context.Set<Faculty>()
             .Include(faculty => faculty.Departments)
             // .ThenInclude(department => department.Propositions)
             .ToListAsync();
+        // var facultyDtos = await context.Faculty
+        //     .Select(faculty => new FacultyDto(
+        //         faculty.Id, faculty.Number, faculty.Name,
+        //         faculty.Departments.Select(department =>
+        //                 new DepartmentDto(
+        //                     department.Id, department.Number, department.Name))
+        //             .ToArray()))
+        //     .ToArrayAsync();
     }
 
     public static async Task<CatFactDTO[]> PrintCatFacts()

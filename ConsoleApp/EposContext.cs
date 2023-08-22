@@ -9,36 +9,36 @@ public class EposContext : DbContext
     {
     }
 
-    public virtual DbSet<Calendar> Calendar { get; set; }
+    public DbSet<Calendar> Calendar { get; set; }
 
-    public virtual DbSet<CalendarBody> CalendarBody { get; set; }
+    public DbSet<CalendarBody> CalendarBody { get; set; }
 
-    public virtual DbSet<Cycle> Cycle { get; set; }
+    public DbSet<Cycle> Cycle { get; set; }
 
-    public virtual DbSet<Degree> Degree { get; set; }
+    public DbSet<Degree> Degree { get; set; }
 
-    public virtual DbSet<Department> Department { get; set; }
+    public DbSet<Department> Department { get; set; }
 
-    public virtual DbSet<Direction> Direction { get; set; }
+    public DbSet<Direction> Direction { get; set; }
 
-    public virtual DbSet<Discipline> Discipline { get; set; }
-    public virtual DbSet<Faculty> Faculty { get; set; }
+    public DbSet<Discipline> Discipline { get; set; }
+    public DbSet<Faculty> Faculty { get; set; }
 
-    public virtual DbSet<FullTime> FullTime { get; set; }
+    public DbSet<FullTime> FullTime { get; set; }
 
-    public virtual DbSet<FullTimeVersion> FullTimeVersion { get; set; }
+    public DbSet<FullTimeVersion> FullTimeVersion { get; set; }
 
-    public virtual DbSet<Group> Group { get; set; }
+    public DbSet<Group> Group { get; set; }
 
-    public virtual DbSet<Plan> Plan { get; set; }
+    public DbSet<Plan> Plan { get; set; }
 
-    public virtual DbSet<Programme> Programme { get; set; }
+    public DbSet<Programme> Programme { get; set; }
 
-    public virtual DbSet<Proposition> Proposition { get; set; }
+    public DbSet<Proposition> Proposition { get; set; }
 
-    public virtual DbSet<Speciality> Speciality { get; set; }
+    public DbSet<Speciality> Speciality { get; set; }
 
-    public virtual DbSet<User> User { get; set; }
+    public DbSet<User> User { get; set; }
 
-    public virtual DbSet<Year> Year { get; set; }
+    public DbSet<Year> Year { get; set; }
 }
