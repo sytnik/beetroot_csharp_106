@@ -32,6 +32,17 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
+    },
+    "watch": {
+      "applicationUrl": "http://localhost:5000;https://localhost:5001",
+      "commandLineArgs": "watch run",
+      "commandName": "Executable",
+      "executablePath": "dotnet",
+      "launchBrowser": true,
+      "workingDirectory": "$(ProjectDir)",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
     }
   }
 }
