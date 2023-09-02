@@ -1,5 +1,10 @@
-﻿@{
+﻿@using MvcApplication.Logic
+@using Microsoft.EntityFrameworkCore
+@model MvcApplication.Logic.TestUser
+
+@{
     ViewData["Title"] = "Home Page";
+    var departments = await context.Department.ToListAsync();
 }
 
 @* <div class="text-center"> *@
@@ -7,56 +12,39 @@
 @*     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p> *@
 @* </div> *@
 @* <button class="btn btn-primary">Clicked 0 times</button> *@
-<div class="col-md-6 m-auto">
-    <h1>The data form</h1>
-    <form asp-action="Index">
-        <label class="form-label">Id</label>
-        <input name="id" class="form-control" type="number" min="1" max="100" required>
-        <label class="form-label">Name</label>
-        <input name="name" class="form-control" type="text" minlength="3" maxlength="20" required>
-        <label class="form-label">Birthdate</label>
-        <input name="date" class="form-control mb-5" type="date" required>
-        <input class="form-control" type="submit" value="Save the data">
-    </form>
-</div>
-
-
-@* <form> *@
-@*     <label>Text</label> *@
-@*     <input type="text" required minlength="3" maxlength="8"> *@
-@*     <label>Number</label> *@
-@*     <input type="number" max="100" min="10" step="0.5" required> *@
-@*     <label>Email</label> *@
-@*     <input type="email" name="email" required pattern="[a-z0-9._%+-]+@@[a-z0-9.-]+\.[a-z]{2,}$"> *@
-@*     <label>Password</label> *@
-@*     <input type="password" maxlength="8"> *@
-@*     <label>Textarea</label> *@
-@*     <textarea></textarea> *@
-@*     <label>Checkbox</label> *@
-@*     <input type="checkbox"> *@
-@*     <label>Radio</label> *@
-@*     <input type="radio" name="value1"> *@
-@*     <input type="radio" name="value1"> *@
-@*     <label>Select</label> *@
-@*     <select> *@
-@*         <option>Option 1</option> *@
-@*         <option>Option 2</option> *@
-@*     </select> *@
-@*     <label>Submit</label> *@
-@*     <input type="submit"> *@
-@*     <input type="button" value="Click me"> *@
-@*     <label>Color</label> *@
-@*     <input type="color"> *@
-@*     <input type="date"> *@
-@*     <input type="email"> *@
-@*     <label>File</label> *@
-@*     <input type="file"> *@
-@*     <label>Hidden</label> *@
-@*     <input type="hidden"> *@
-@*     <label>Image</label> *@
-@*     <input type="image"> *@
-@*     <label>Range</label> *@
-@*     <input type="range" min="10" max="100" step="0.5"> *@
-@*     <label>Time</label> *@
-@*     <input type="time"> *@
-@* </form> *@
+@if (User.IsInRole("Admin"))
+{
+    <div class="col-md-8 m-auto">
+        <table class="table">
+            <tr>
+                <td>Id</td>
+                <td>Name</td>
+                <td>Info</td>
+            </tr>
+            @foreach (var department in departments)
+            {
+                <tr>
+                    <td>@department.Id</td>
+                    <td>@department.Name</td>
+                    <td>@department.Info</td>
+                </tr>
+            }
+        </table>
+    </div>
+}
+@if (User.IsInRole("User"))
+{
+    <div class="col-md-6 m-auto">
+        <h1>The data form</h1>
+        <form asp-action="IndexPost">
+            <label class="form-label">Id</label>
+            <input asp-for="Id" class="form-control" type="number" min="1" max="100" required>
+            <label class="form-label">Name</label>
+            <input asp-for="Name" class="form-control" type="text" minlength="3" maxlength="20" required>
+            <label class="form-label">Birthdate</label>
+            <input asp-for="Date" class="form-control mb-5" type="date" required>
+            <input class="form-control" type="submit" value="Save the data">
+        </form>
+    </div>
+}
+<a asp-action="Privacy">Privacy</a>
