@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MvcApplication.Filters;
 using MvcApplication.Logic;
 using MvcApplication.Models;
 
@@ -17,9 +18,11 @@ public class HomeController : Controller
         _context = context;
     }
     
+    [LoggingFilter]
     public IActionResult Index()
     {
         var faculties = _context.Faculty.ToList();
+        // throw new Exception();
         return View();
     }
 

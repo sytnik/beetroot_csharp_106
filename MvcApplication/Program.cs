@@ -1,11 +1,14 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using MvcApplication.Logic;
+using ShopLibrary.Dbo;
+using ShopLibrary.Util;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddShopContext();
 builder.Services.AddDbContext<EposContext>(optionsBuilder =>
     optionsBuilder.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -13,23 +16,28 @@ builder.Services
     .AddAuthentication(options =>
         options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options => options.LoginPath = "/Home/Login");
-var app = builder.Build();
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
-}
-
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-app.UseRouting();
-app.UseAuthentication();
-app.UseAuthorization();
-app.UseSwagger();
-app.UseSwaggerUI();
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+var application = builder.Build();
+if (application.Environment.IsDevelopment()) application.UseDeveloperExceptionPage();
+else if (application.Environment.IsProduction()) application.UseExceptionHandler("/Home/Error");
+application.UseHsts();
+application.UseHttpsRedirection();
+application.UseStaticFiles();
+application.UseRouting();
+application.UseAuthentication();
+application.UseAuthorization();
+application.UseSwagger();
+application.UseSwaggerUI();
+// application.MapControllerRoute(
+//     name: "default",
+//     pattern: "{controller=Home}/{action=Index}/{id?}");
+application.MapDefaultControllerRoute();
+var shopContext = application.Services.CreateScope()
+    .ServiceProvider.GetService<ShopContext>();
+shopContext?.Publish();
+var shops = shopContext?.Shop.ToList();
+var customers2 = shopContext?.Customer.ToList();
+var products = shopContext?.Product.ToList();
+var orders = shopContext?.Order.ToList();
 var customers = new List<Customer>
 {
     new Customer(1, "John"),
@@ -37,18 +45,18 @@ var customers = new List<Customer>
     new Customer(3, "Peter")
 };
 
-app.MapGet("/customers", () => customers);
+application.MapGet("/customers", () => customers);
 
-app.MapGet("/customers/{id:int}", (int id) => customers
+application.MapGet("/customers/{id:int}", (int id) => customers
     .FirstOrDefault(customer => customer.id == id));
 
-app.MapPost("/customers", (Customer customer) =>
+application.MapPost("/customers", (Customer customer) =>
 {
     customers.Add(customer);
     return customer;
 });
 
-app.MapPut("/customers/{id:int}", (int id, Customer customer) =>
+application.MapPut("/customers/{id:int}", (int id, Customer customer) =>
 {
     var index = customers
         .FindIndex(cust => cust.id == id);
@@ -56,7 +64,7 @@ app.MapPut("/customers/{id:int}", (int id, Customer customer) =>
     return customer;
 });
 
-app.MapDelete("/customers/{id:int}", (int id) =>
+application.MapDelete("/customers/{id:int}", (int id) =>
 {
     var customer = customers
         .FirstOrDefault(cust => cust.id == id);
@@ -64,6 +72,6 @@ app.MapDelete("/customers/{id:int}", (int id) =>
         customers.Remove(customer);
 });
 
-app.Run();
+application.Run();
 
 public record Customer(int id, string Name);
