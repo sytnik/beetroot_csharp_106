@@ -1,23 +1,6 @@
 ﻿{
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iisExpress": {
-      "applicationUrl": "http://localhost:22049",
-      "sslPort": 44384
-    }
-  },
   "profiles": {
-    "http": {
-      "commandName": "Project",
-      "dotnetRunMessages": true,
-      "launchBrowser": true,
-      "applicationUrl": "http://localhost:5184",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
-    "https-dev": {
+    "mvc-dev": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
@@ -26,7 +9,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "https-prod": {
+    "mvc-prod": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
@@ -35,14 +18,7 @@
         "ASPNETCORE_ENVIRONMENT": "Production"
       }
     },
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
-    "watch": {
+    "mvc-watch": {
       "applicationUrl": "http://localhost:5000;https://localhost:5001",
       "commandLineArgs": "watch run",
       "commandName": "Executable",

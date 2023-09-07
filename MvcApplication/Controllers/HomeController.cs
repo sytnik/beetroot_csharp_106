@@ -7,21 +7,22 @@ using Microsoft.AspNetCore.Mvc;
 using MvcApplication.Filters;
 using MvcApplication.Logic;
 using MvcApplication.Models;
+using MvcApplication.Services;
 
 namespace MvcApplication.Controllers;
 
 public class HomeController : Controller
 {
-    private EposContext _context;
-    public HomeController(EposContext context)
-    {
-        _context = context;
-    }
-    
+    private UniversityStructureService _service;
+    public HomeController(UniversityStructureService service) =>
+        _service = service;
+
     [LoggingFilter]
     public IActionResult Index()
     {
-        var faculties = _context.Faculty.ToList();
+        var faculties = _service.GetFaculties();
+        var departments = _service.GetDepartments();
+        var specialities = _service.GetSpecialities();
         // throw new Exception();
         return View();
     }

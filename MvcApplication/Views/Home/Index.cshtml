@@ -1,7 +1,5 @@
-﻿@using MvcApplication.Logic
-@using Microsoft.EntityFrameworkCore
-@model MvcApplication.Logic.TestUser
-
+﻿@model MvcApplication.Logic.TestUser
+@inject EposContext context
 @{
     ViewData["Title"] = "Home Page";
     var departments = await context.Department.ToListAsync();

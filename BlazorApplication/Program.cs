@@ -1,32 +1,25 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using BlazorApplication.Data;
-using ShopLibrary.Util;
+using LmsClassLibrary.Util;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
+StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
-builder.Services.AddShopContext();
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+builder.Services.RegisterContext(builder.Configuration.GetConnectionString("DefaultConnection"));
+builder.Services.AddMudServices();
+var application = builder.Build();
+if (!application.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    application.UseExceptionHandler("/Error");
+    application.UseHsts();
 }
 
-app.UseHttpsRedirection();
-
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.MapBlazorHub();
-app.MapFallbackToPage("/_Host");
-
-app.Run();
+application.UseHttpsRedirection();
+application.UseStaticFiles();
+application.UseRouting();
+application.MapBlazorHub();
+application.MapFallbackToPage("/_Host");
+application.Run();

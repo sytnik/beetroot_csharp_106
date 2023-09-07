@@ -1,6 +1,8 @@
+using LmsClassLibrary.Util;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using MvcApplication.Logic;
+using MvcApplication.Services;
 using ShopLibrary.Dbo;
 using ShopLibrary.Util;
 
@@ -9,9 +11,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddShopContext();
-builder.Services.AddDbContext<EposContext>(optionsBuilder =>
-    optionsBuilder.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<UniversityStructureService>();
+builder.Services.RegisterContext(builder.Configuration.GetConnectionString("DefaultConnection"));
 builder.Services
     .AddAuthentication(options =>
         options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme)
@@ -31,13 +32,13 @@ application.UseSwaggerUI();
 //     name: "default",
 //     pattern: "{controller=Home}/{action=Index}/{id?}");
 application.MapDefaultControllerRoute();
-var shopContext = application.Services.CreateScope()
-    .ServiceProvider.GetService<ShopContext>();
-shopContext?.Publish();
-var shops = shopContext?.Shop.ToList();
-var customers2 = shopContext?.Customer.ToList();
-var products = shopContext?.Product.ToList();
-var orders = shopContext?.Order.ToList();
+// var shopContext = application.Services.CreateScope()
+//     .ServiceProvider.GetService<ShopContext>();
+// shopContext?.Publish();
+// var shops = shopContext?.Shop.ToList();
+// var customers2 = shopContext?.Customer.ToList();
+// var products = shopContext?.Product.ToList();
+// var orders = shopContext?.Order.ToList();
 var customers = new List<Customer>
 {
     new Customer(1, "John"),
