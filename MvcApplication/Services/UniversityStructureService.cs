@@ -1,4 +1,5 @@
 ﻿using LmsClassLibrary.Model;
+using Microsoft.EntityFrameworkCore;
 using MvcApplication.Logic;
 
 namespace MvcApplication.Services;
@@ -6,13 +7,22 @@ namespace MvcApplication.Services;
 public class UniversityStructureService
 {
     private readonly EposContext _context;
+
     public UniversityStructureService(EposContext context) =>
         _context = context;
-    
-    public Faculty[] GetFaculties() =>
-        _context.Faculty.ToArray();
-    public Department[] GetDepartments() =>
-        _context.Department.ToArray();
-    public Speciality[] GetSpecialities() =>
-        _context.Speciality.ToArray();
+
+    public Task<Faculty[]> GetFaculties()
+    {
+        var facultiesWhere = _context.Faculty
+            .Where(faculty => faculty.Name.Contains("a"));
+        var facultiesOrderBy =
+            facultiesWhere.OrderBy(faculty => faculty.Name);
+        return facultiesOrderBy.ToArrayAsync();
+    }
+
+    public Task<Department[]> GetDepartments() =>
+        _context.Department.ToArrayAsync();
+
+    public Task<Speciality[]> GetSpecialities() =>
+        _context.Speciality.ToArrayAsync();
 }

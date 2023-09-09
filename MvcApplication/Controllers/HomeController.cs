@@ -13,19 +13,23 @@ namespace MvcApplication.Controllers;
 
 public class HomeController : Controller
 {
-    private UniversityStructureService _service;
+    private readonly UniversityStructureService _service;
+
     public HomeController(UniversityStructureService service) =>
         _service = service;
 
-    [LoggingFilter]
-    public IActionResult Index()
+
+    public async Task<IActionResult> Index()
     {
-        var faculties = _service.GetFaculties();
-        var departments = _service.GetDepartments();
-        var specialities = _service.GetSpecialities();
+        var faculties = await _service.GetFaculties();
+        var departments = await _service.GetDepartments();
+        var specialities = await _service.GetSpecialities();
         // throw new Exception();
         return View();
     }
+
+    [Authorize(Roles = "User")]
+    public IActionResult UserProfile() => View();
 
     public IActionResult IndexPost(TestUser user)
     {
@@ -44,10 +48,10 @@ public class HomeController : Controller
     {
         return View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
     }
-    
+
     public IActionResult Login() =>
         View(new MockUserDto {ReturnUrl = HttpContext.Request.Query["ReturnUrl"].ToString()});
-    
+
     public async Task<IActionResult> LoginPost(MockUserDto dto)
     {
         var mockUser = AuthMock.Users.FirstOrDefault(user =>
@@ -64,7 +68,7 @@ public class HomeController : Controller
             return Redirect(dto.ReturnUrl);
         return RedirectToAction("Index");
     }
-    
+
     public async Task<IActionResult> Logout()
     {
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
