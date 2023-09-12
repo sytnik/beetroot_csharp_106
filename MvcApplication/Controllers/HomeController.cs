@@ -13,9 +13,9 @@ namespace MvcApplication.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly UniversityStructureService _service;
+    private readonly IUniversityStructureService _service;
 
-    public HomeController(UniversityStructureService service) =>
+    public HomeController(IUniversityStructureService service) =>
         _service = service;
 
 

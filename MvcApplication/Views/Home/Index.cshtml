@@ -5,11 +5,11 @@
     var departments = await context.Department.ToListAsync();
 }
 
-@* <div class="text-center"> *@
-@*     <h1 class="display-4">Welcome</h1> *@
-@*     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p> *@
-@* </div> *@
-@* <button class="btn btn-primary">Clicked 0 times</button> *@
+<div id="textBlock" class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+<button class="btn btn-primary">Clicked 0 times</button>
 @if (User.IsInRole("Admin"))
 {
     <div class="col-md-8 m-auto">

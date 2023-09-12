@@ -4,12 +4,16 @@ using MvcApplication.Logic;
 
 namespace MvcApplication.Services;
 
-public class UniversityStructureService
+public sealed class UniversityStructureService : IUniversityStructureService
 {
     private readonly EposContext _context;
 
     public UniversityStructureService(EposContext context) =>
         _context = context;
+
+    public UniversityStructureService()
+    {
+    }
 
     public Task<Faculty[]> GetFaculties()
     {

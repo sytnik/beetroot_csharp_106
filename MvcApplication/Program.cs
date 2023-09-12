@@ -14,7 +14,7 @@ public sealed class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.AddShopContext();
-        builder.Services.AddScoped<UniversityStructureService>();
+        builder.Services.AddScoped<IUniversityStructureService, UniversityStructureService>();
         builder.Services.RegisterContext(builder.Configuration.GetConnectionString("DefaultConnection"));
         builder.Services
             .AddAuthentication(options =>
