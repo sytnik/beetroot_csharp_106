@@ -1,4 +1,6 @@
-﻿namespace MvcApplication.Logic;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MvcApplication.Logic;
 
 public static class AuthMock
 {
@@ -31,7 +33,9 @@ public class MockUser
 
 public record MockUserDto
 {
+    [Required, MinLength(3)]
     public string Login { get; set; }
+    [Required, MinLength(3)]
     public string Password { get; set; }
     public string ReturnUrl { get; set; }
 }

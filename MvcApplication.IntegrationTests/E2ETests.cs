@@ -14,7 +14,6 @@ namespace MvcApplication.IntegrationTests
         {
             _appProcess = new Process
             {
-
                 StartInfo = new ProcessStartInfo
                 {
                     FileName = "dotnet",

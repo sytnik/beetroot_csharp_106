@@ -54,9 +54,15 @@ public class HomeController : Controller
 
     public async Task<IActionResult> LoginPost(MockUserDto dto)
     {
+        if(!ModelState.IsValid) return View("Login", dto);
         var mockUser = AuthMock.Users.FirstOrDefault(user =>
             user.Login == dto.Login && user.Password == dto.Password);
-        if (mockUser == null) return RedirectToAction("Login");
+
+        if (mockUser == null)
+        {
+            ModelState.AddModelError("Password", "Invalid login or password");
+            return View("Login", dto);
+        }
         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
             new ClaimsPrincipal(new ClaimsIdentity(
                 new List<Claim>

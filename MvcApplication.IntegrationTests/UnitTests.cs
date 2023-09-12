@@ -26,9 +26,12 @@ namespace MvcApplication.IntegrationTests
         public async Task Index_ReturnsViewResult()
         {
             // Arrange
-            _serviceMock.Setup(s => s.GetFaculties()).ReturnsAsync(Array.Empty<Faculty>());
-            _serviceMock.Setup(s => s.GetDepartments()).ReturnsAsync(Array.Empty<Department>());
-            _serviceMock.Setup(s => s.GetSpecialities()).ReturnsAsync(Array.Empty<Speciality>());
+            _serviceMock.Setup(s => s.GetFaculties())
+                .ReturnsAsync(Array.Empty<Faculty>());
+            _serviceMock.Setup(s => s.GetDepartments())
+                .ReturnsAsync(Array.Empty<Department>());
+            _serviceMock.Setup(s => s.GetSpecialities())
+                .ReturnsAsync(Array.Empty<Speciality>());
             // Act
             var result = await _controller.Index();
             // Assert
