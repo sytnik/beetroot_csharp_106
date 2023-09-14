@@ -5,7 +5,7 @@ using ShopLibrary.Dbo;
 
 namespace ShopLibrary.Util;
 
-public static class Data
+public static class ShopData
 {
     public static void Publish(this ShopContext context)
     {

@@ -1,6 +1,8 @@
 using LmsClassLibrary.Util;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using MvcApplication.Logic;
 using MvcApplication.Services;
+using ShopLibrary.Dbo;
 using ShopLibrary.Util;
 
 namespace MvcApplication;
@@ -32,45 +34,9 @@ public sealed class Program
         application.UseSwagger();
         application.UseSwaggerUI();
         application.MapDefaultControllerRoute();
-        var customers = new List<Customer>
-        {
-            new Customer(1, "John"),
-            new Customer(2, "Mary"),
-            new Customer(3, "Peter")
-        };
-        application.MapGet("/customers", () => customers);
-        application.MapGet("/customers/{id:int}", (int id) => customers
-            .FirstOrDefault(customer => customer.id == id));
-        application.MapPost("/customers", (Customer customer) =>
-        {
-            customers.Add(customer);
-            return customer;
-        });
-        application.MapPut("/customers/{id:int}", (int id, Customer customer) =>
-        {
-            var index = customers
-                .FindIndex(cust => cust.id == id);
-            customers[index] = customer;
-            return customer;
-        });
-        application.MapDelete("/customers/{id:int}", (int id) =>
-        {
-            var customer = customers
-                .FirstOrDefault(cust => cust.id == id);
-            if (customer is not null)
-                customers.Remove(customer);
-        });
-
+        application.Services.CreateAsyncScope().ServiceProvider
+            .GetService<ShopContext>().Publish();
+        application.SetupApis();
         application.Run();
     }
 }
-
-public record Customer(int id, string Name);
-
-// namespace MvcApplication
-// {
-//     public partial class Program
-//     {
-//         
-//     }
-// }
