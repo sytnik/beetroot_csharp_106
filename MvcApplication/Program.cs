@@ -15,9 +15,8 @@ public sealed class Program
         builder.Services.AddControllersWithViews();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
-        builder.Services.AddShopContext();
-        builder.Services.AddScoped<IUniversityStructureService, UniversityStructureService>();
-        builder.Services.RegisterContext(builder.Configuration.GetConnectionString("DefaultConnection"));
+        builder.Services.AddShopServices();
+        // builder.Services.AddScoped<IUniversityStructureService, UniversityStructureService>();
         builder.Services
             .AddAuthentication(options =>
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme)

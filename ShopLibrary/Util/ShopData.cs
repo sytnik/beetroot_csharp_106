@@ -43,8 +43,4 @@ public static class ShopData
         context.OrderProduct.AddRange(orderProducts);
         context.SaveChanges();
     }
-
-    public static void AddShopContext(this IServiceCollection services) =>
-        services.AddDbContext<ShopContext>(options =>
-            options.UseInMemoryDatabase("ShopDb"));
 }

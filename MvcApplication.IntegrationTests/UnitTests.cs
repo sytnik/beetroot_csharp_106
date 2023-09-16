@@ -19,7 +19,7 @@ namespace MvcApplication.IntegrationTests
         public HomeControllerTests()
         {
             _serviceMock = new Mock<IUniversityStructureService>();
-            _controller = new HomeController(_serviceMock.Object);
+            _controller = new HomeController();
         }
 
         [Fact]

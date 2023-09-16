@@ -1,8 +1,8 @@
 ﻿@model MvcApplication.Logic.TestUser
-@inject EposContext context
+@* @inject EposContext context *@
 @{
     ViewData["Title"] = "Home Page";
-    var departments = await context.Department.ToListAsync();
+    // var departments = await context.Department.ToListAsync();
 }
 
 <div id="textBlock" class="text-center">
@@ -19,14 +19,14 @@
                 <td>Name</td>
                 <td>Info</td>
             </tr>
-            @foreach (var department in departments)
-            {
-                <tr>
-                    <td>@department.Id</td>
-                    <td>@department.Name</td>
-                    <td>@department.Info</td>
-                </tr>
-            }
+            @* @foreach (var department in departments) *@
+            @* { *@
+            @*     <tr> *@
+            @*         <td>@department.Id</td> *@
+            @*         <td>@department.Name</td> *@
+            @*         <td>@department.Info</td> *@
+            @*     </tr> *@
+            @* } *@
         </table>
     </div>
 }

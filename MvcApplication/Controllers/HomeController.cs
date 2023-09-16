@@ -15,15 +15,16 @@ public class HomeController : Controller
 {
     private readonly IUniversityStructureService _service;
 
-    public HomeController(IUniversityStructureService service) =>
-        _service = service;
+    // public HomeController(IUniversityStructureService service) =>
+    //     _service = service;
+    public HomeController(){}
 
 
     public async Task<IActionResult> Index()
     {
-        var faculties = await _service.GetFaculties();
-        var departments = await _service.GetDepartments();
-        var specialities = await _service.GetSpecialities();
+        // var faculties = await _service.GetFaculties();
+        // var departments = await _service.GetDepartments();
+        // var specialities = await _service.GetSpecialities();
         // throw new Exception();
         return View();
     }
