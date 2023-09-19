@@ -1,0 +1,42 @@
+﻿@using ShopLibrary.Dto
+@using ShopLibrary
+@inject ShopService ShopService
+<MudDialog>
+    <DialogContent>
+        <MudForm>
+            <MudTextField T="string" Label="Username" @bind-Value="@_dto.Name"
+                          Required="true" RequiredError="User name is required!"/>
+            <MudTextField T="string" Label="Address" @bind-Value="@_dto.Address"
+                          Required="true" RequiredError="Address is required!"/>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public int Id { get; set; }
+
+    CustomerDto _dto;
+
+    void Cancel() => MudDialog.Cancel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _dto = await ShopService.GetCustomer(Id);
+    }
+
+    async Task Submit()
+    {
+        await ShopService.UpdateCustomer(_dto);
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+
+}

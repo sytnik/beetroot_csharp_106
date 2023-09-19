@@ -2,18 +2,21 @@
 @page "/"
 @using ShopLibrary
 @using ShopLibrary.Dto
-
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
 <PageTitle>Index</PageTitle>
 
 <MudText Typo="Typo.h3" GutterBottom="true">Hello, world!</MudText>
 
 @foreach (var customer in _customers)
 {
-    <MudCard Class="mb-4">
-        <CardHeader Title="@customer.Name"/>
-        <CardBody>
-            <MudText Typo="Typo.body2" Color="Color.Dark">@customer.Address</MudText>
-        </CardBody>
+    <MudCard Class="mb-4 pa-5">
+        <MudText Typo="Typo.h5" Color="Color.Dark">ID: @customer.Id, Name: @customer.Name</MudText>
+        <MudText Typo="Typo.body2" Color="Color.Dark">@customer.Address</MudText>
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary"
+                   OnClick="() => OpenDialog(customer.Id)">
+            Edit
+        </MudButton>
     </MudCard>
 }
 
@@ -29,8 +32,20 @@
 {
     CustomerDto[] _customers = {};
 
-    protected override async Task OnInitializedAsync()
-    {
+    protected override async Task OnInitializedAsync() =>
         _customers = await ShopService.GetCustomers();
+
+    private async Task OpenDialog(int id)
+    {
+        var options = new DialogOptions {ClassBackground = "my-custom-class"};
+        var result = await DialogService.Show<ManageCustomerDialog>(
+            $"Change customer ID: {id}"
+            , new DialogParameters {{"Id", id}},
+            options).Result;
+        if (result != DialogResult.Cancel())
+        {
+            _customers = await ShopService.GetCustomers();
+            Snackbar.Add($"Customer {id} updated", Severity.Success);
+        }
     }
 }

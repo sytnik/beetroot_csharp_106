@@ -46,3 +46,33 @@
     </div>
 }
 <a asp-action="Privacy">Privacy</a>
+<h1>Grid</h1>
+<div class="row text-center my-4">
+    @for (var i = 0; i < 12; i++)
+    {
+        <div class="col-md-1 p-1">
+            <div style="border: 2px solid blue">
+                Element @(i + 1)
+            </div>
+        </div>
+    }
+</div>
+<div class="row text-center my-4">
+    <div class="col-md-7 p-1">
+        <div style="border: 2px solid blue">
+            Size-7
+        </div>
+    </div>
+    <div class="col-md-5 p-1">
+        <div style="border: 2px solid blue">
+            Size-5
+        </div>
+    </div>
+</div>
+<div class="row my-4">
+    <div class="col-md-5 mx-auto p-1">
+        <div style="border: 2px solid blue">
+            Size-5
+        </div>
+    </div>
+</div>

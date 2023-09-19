@@ -4,14 +4,35 @@ using ShopLibrary.Dto;
 
 namespace ShopLibrary;
 
-public class ShopService
+public class ShopService(ShopContext shopContext)
 {
-    private readonly ShopContext _shopContext;
-    public ShopService(ShopContext shopContext) => _shopContext = shopContext;
-
     public Task<CustomerDto[]> GetCustomers() =>
-        _shopContext.Customer
+        shopContext.Customer
             .Select(customer =>
                 new CustomerDto(customer.Id, customer.Name, customer.Address))
             .ToArrayAsync();
+
+    public Task<CustomerDto> GetCustomer(int id) =>
+        shopContext.Customer
+            .Select(customer =>
+                new CustomerDto(customer.Id, customer.Name, customer.Address))
+            .FirstOrDefaultAsync(customer => customer.Id == id);
+    
+    public Task<CustomerDto> UpdateCustomer(CustomerDto customerDto) =>
+        shopContext.Customer
+            .FirstOrDefaultAsync(customer => customer.Id == customerDto.Id)
+        .ContinueWith(task =>
+        {
+            var customer = task.Result;
+            customer.Name = customerDto.Name;
+            customer.Address = customerDto.Address;
+            return customer;
+        })
+        .ContinueWith(task =>
+        {
+            shopContext.Customer.Update(task.Result);
+            return task.Result;
+        })
+        .ContinueWith(_ => shopContext.SaveChangesAsync())
+        .ContinueWith(_ => customerDto);
 }

@@ -1,3 +1,8 @@
 ﻿namespace ShopLibrary.Dto;
 
-public record CustomerDto(int Id, string Name, string Address);
+public sealed class CustomerDto(int id, string name, string address)
+{
+    public readonly int Id = id;
+    public string Name = name;
+    public string Address = address;
+}
