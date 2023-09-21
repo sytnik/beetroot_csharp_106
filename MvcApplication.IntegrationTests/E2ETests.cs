@@ -37,7 +37,6 @@ namespace MvcApplication.IntegrationTests
             Assert.NotNull(element);
         }
         
-
         public void Dispose()
         {
             _driver.Quit();

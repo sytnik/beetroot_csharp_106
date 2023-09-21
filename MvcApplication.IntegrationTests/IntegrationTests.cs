@@ -7,7 +7,8 @@ public class IntegrationTests : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly WebApplicationFactory<Program> _factory;
 
-    public IntegrationTests(WebApplicationFactory<Program> factory) => _factory = factory;
+    public IntegrationTests(WebApplicationFactory<Program> factory) =>
+        _factory = factory;
     
     // check index for anonymous user
     [Theory]
@@ -17,7 +18,8 @@ public class IntegrationTests : IClassFixture<WebApplicationFactory<Program>>
     {
         // arrange
         var client = _factory
-            .CreateClient(new WebApplicationFactoryClientOptions {AllowAutoRedirect = false});
+            .CreateClient(new WebApplicationFactoryClientOptions
+                {AllowAutoRedirect = false});
         // act
         var response = await client.GetAsync(url);
         // assert
@@ -34,7 +36,8 @@ public class IntegrationTests : IClassFixture<WebApplicationFactory<Program>>
     {
         // arrange
         var client = _factory
-            .CreateClient(new WebApplicationFactoryClientOptions {AllowAutoRedirect = false});
+            .CreateClient(new WebApplicationFactoryClientOptions
+                {AllowAutoRedirect = false});
         // act
         var response = await client.GetAsync(url);
         // assert

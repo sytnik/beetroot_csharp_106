@@ -1,7 +1,4 @@
-using LmsClassLibrary.Util;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using MvcApplication.Logic;
-using MvcApplication.Services;
 using ShopLibrary.Dbo;
 using ShopLibrary.Util;
 
@@ -16,7 +13,6 @@ public sealed class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.AddShopServices();
-        // builder.Services.AddScoped<IUniversityStructureService, UniversityStructureService>();
         builder.Services
             .AddAuthentication(options =>
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme)

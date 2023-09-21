@@ -4,7 +4,7 @@ using ShopLibrary.Dto;
 
 namespace ShopLibrary;
 
-public class ShopService(ShopContext shopContext)
+public class ShopService(ShopContext shopContext):IShopService
 {
     public Task<CustomerDto[]> GetCustomers() =>
         shopContext.Customer

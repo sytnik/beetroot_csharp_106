@@ -7,31 +7,28 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Moq;
 using MvcApplication.Controllers;
 using MvcApplication.Logic;
-using MvcApplication.Services;
+using ShopLibrary;
+using ShopLibrary.Dto;
 
 namespace MvcApplication.IntegrationTests
 {
     public class HomeControllerTests
     {
-        private readonly Mock<IUniversityStructureService> _serviceMock;
+        private readonly Mock<IShopService> _serviceMock;
         private readonly HomeController _controller;
 
         public HomeControllerTests()
         {
-            _serviceMock = new Mock<IUniversityStructureService>();
-            _controller = new HomeController();
+            _serviceMock = new Mock<IShopService>();
+            _controller = new HomeController(_serviceMock.Object);
         }
 
         [Fact]
         public async Task Index_ReturnsViewResult()
         {
             // Arrange
-            _serviceMock.Setup(s => s.GetFaculties())
-                .ReturnsAsync(Array.Empty<Faculty>());
-            _serviceMock.Setup(s => s.GetDepartments())
-                .ReturnsAsync(Array.Empty<Department>());
-            _serviceMock.Setup(s => s.GetSpecialities())
-                .ReturnsAsync(Array.Empty<Speciality>());
+            _serviceMock.Setup(shopService => shopService.GetCustomers())
+                .ReturnsAsync(Array.Empty<CustomerDto>());
             // Act
             var result = await _controller.Index();
             // Assert
@@ -63,15 +60,19 @@ namespace MvcApplication.IntegrationTests
             // Arrange
             var dto = new MockUserDto {Login = "test", Password = "wrongPassword"};
             var authServiceMock = new Mock<IAuthenticationService>();
-            authServiceMock.Setup(authenticationService => authenticationService.SignInAsync(It.IsAny<HttpContext>(),
+            authServiceMock.Setup(authenticationService => authenticationService
+                    .SignInAsync(It.IsAny<HttpContext>(),
                     It.IsAny<string>(),
                     It.IsAny<ClaimsPrincipal>(), It.IsAny<AuthenticationProperties>()))
                 .Returns(Task.CompletedTask);
             var httpContextMock = new Mock<HttpContext>();
-            httpContextMock.Setup(context => context.RequestServices.GetService(typeof(IAuthenticationService)))
+            httpContextMock.Setup(context => context.RequestServices
+                    .GetService(typeof(IAuthenticationService)))
                 .Returns(authServiceMock.Object);
-            httpContextMock.Setup(context => context.Request.Query["ReturnUrl"]).Returns("/someReturnUrl");
-            _controller.ControllerContext = new ControllerContext {HttpContext = httpContextMock.Object};
+            httpContextMock.Setup(context => context.Request.Query["ReturnUrl"])
+                .Returns("/someReturnUrl");
+            _controller.ControllerContext = new ControllerContext 
+                {HttpContext = httpContextMock.Object};
             SetupUrlHelperMock(_controller);
             // Act
             var result = await _controller.LoginPost(dto);
@@ -104,10 +105,13 @@ namespace MvcApplication.IntegrationTests
         private static void SetupUrlHelperMock(ControllerBase controller)
         {
             var urlHelperMock = new Mock<IUrlHelper>();
-            urlHelperMock.Setup(url => url.IsLocalUrl(It.IsAny<string>())).Returns<string>(url => url == "/localUrl");
-            urlHelperMock.Setup(url => url.Action(It.IsAny<UrlActionContext>())).Returns("http://localhost");
+            urlHelperMock.Setup(url => url.IsLocalUrl(It.IsAny<string>()))
+                .Returns<string>(url => url == "/localUrl");
+            urlHelperMock.Setup(url => url.Action(It.IsAny<UrlActionContext>()))
+                .Returns("http://localhost");
             var urlHelperFactoryMock = new Mock<IUrlHelperFactory>();
-            urlHelperFactoryMock.Setup(factory => factory.GetUrlHelper(It.IsAny<ActionContext>()))
+            urlHelperFactoryMock.Setup(factory => factory
+                    .GetUrlHelper(It.IsAny<ActionContext>()))
                 .Returns(urlHelperMock.Object);
             controller.Url = urlHelperMock.Object;
         }

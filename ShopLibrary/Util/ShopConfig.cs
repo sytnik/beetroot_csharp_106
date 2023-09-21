@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ShopLibrary.Dbo;
 using ShopLibrary.Dto;
 
@@ -8,8 +9,10 @@ public static class ShopConfig
 {
     public static void SetupApis(this IEndpointRouteBuilder application)
     {
-        application.MapGet("/customers", (ShopService service) => service.GetCustomers());
-        application.MapGet("/customers/{id:int}", async (int id, ShopContext context) =>
+        application.MapGet("/customers", ([FromServices] ShopService service) =>
+        service.GetCustomers());
+        application.MapGet("/customers/{id:int}", async (int id,
+            [FromServices] ShopContext context) =>
         {
             var dto = await context.Customer
                 .Select(customer =>
@@ -18,9 +21,9 @@ public static class ShopConfig
             return dto is null ? Results.NotFound($"Customer with ID {id} not found.") : Results.Ok(dto);
         });
         application.MapPost("/customers",
-            async (CustomerDto customer, ShopContext context) =>
+            async (CustomerDto customer, [FromServices] ShopContext context) =>
             {
-                await context.Customer.AddAsync(new Customer()
+                await context.Customer.AddAsync(new Customer
                 {
                     Id = customer.Id,
                     Name = customer.Name,
@@ -30,7 +33,8 @@ public static class ShopConfig
                 return customer;
             });
         application.MapPut("/customers/{id:int}",
-            async (int id, CustomerDto customerDto, ShopContext context) =>
+            async (int id, CustomerDto customerDto,
+                [FromServices] ShopContext context) =>
             {
                 var customerToUpdate = await context.Customer
                     .FirstOrDefaultAsync(customer => customer.Id == id);
@@ -43,19 +47,20 @@ public static class ShopConfig
                 await context.SaveChangesAsync();
                 return customerDto;
             });
-        application.MapDelete("/customers/{id:int}", async (int id, ShopContext context) =>
-        {
-            var customer = await context.Customer
-                .FirstOrDefaultAsync(customer => customer.Id == id);
-            if (customer is null) return;
-            context.Customer.Remove(customer);
-            await context.SaveChangesAsync();
-        });
+        application.MapDelete("/customers/{id:int}",
+            async (int id, [FromServices] ShopContext context) =>
+            {
+                var customer = await context.Customer
+                    .FirstOrDefaultAsync(customer => customer.Id == id);
+                if (customer is null) return;
+                context.Customer.Remove(customer);
+                await context.SaveChangesAsync();
+            });
     }
 
     public static void AddShopServices(this IServiceCollection services)
     {
         services.AddDbContext<ShopContext>(options => options.UseInMemoryDatabase("ShopDb"));
-        services.AddScoped<ShopService>();
+        services.AddScoped<IShopService, ShopService>();
     }
 }

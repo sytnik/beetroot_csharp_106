@@ -4,31 +4,23 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MvcApplication.Filters;
 using MvcApplication.Logic;
 using MvcApplication.Models;
-using MvcApplication.Services;
+using ShopLibrary;
 
 namespace MvcApplication.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly IUniversityStructureService _service;
-
-    // public HomeController(IUniversityStructureService service) =>
-    //     _service = service;
-    public HomeController(){}
-
-
-    public async Task<IActionResult> Index()
-    {
-        // var faculties = await _service.GetFaculties();
-        // var departments = await _service.GetDepartments();
-        // var specialities = await _service.GetSpecialities();
-        // throw new Exception();
-        return View();
-    }
-
+    private readonly IShopService _service;
+    public HomeController(IShopService service) => _service = service;
+    
+    public async Task<IActionResult> Index() =>
+        View(await _service.GetCustomers());
+    
+    public async Task<IActionResult> CustomerProfile(int id)=>
+        View(await _service.GetCustomer(id));
+    
     [Authorize(Roles = "User")]
     public IActionResult UserProfile() => View();
 

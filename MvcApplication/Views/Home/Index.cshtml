@@ -1,10 +1,20 @@
-﻿@model MvcApplication.Logic.TestUser
-@* @inject EposContext context *@
+﻿@model ShopLibrary.Dto.CustomerDto[]
 @{
     ViewData["Title"] = "Home Page";
-    // var departments = await context.Department.ToListAsync();
 }
 
+<a href="static/page.html">Some static html</a>
+
+<div class="row">
+    @foreach (var customer in Model)
+    {
+        <div class="col-md-4">
+            <a asp-action="CustomerProfile" asp-route-id="@customer.Id">
+                <h3>@customer.Name</h3>
+            </a>
+        </div>
+    }
+</div>
 <div id="textBlock" class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
@@ -30,21 +40,21 @@
         </table>
     </div>
 }
-@if (User.IsInRole("User"))
-{
-    <div class="col-md-6 m-auto">
-        <h1>The data form</h1>
-        <form asp-action="IndexPost">
-            <label class="form-label">Id</label>
-            <input asp-for="Id" class="form-control" type="number" min="1" max="100" required>
-            <label class="form-label">Name</label>
-            <input asp-for="Name" class="form-control" type="text" minlength="3" maxlength="20" required>
-            <label class="form-label">Birthdate</label>
-            <input asp-for="Date" class="form-control mb-5" type="date" required>
-            <input class="form-control" type="submit" value="Save the data">
-        </form>
-    </div>
-}
+@* @if (User.IsInRole("User")) *@
+@* { *@
+@*     <div class="col-md-6 m-auto"> *@
+@*         <h1>The data form</h1> *@
+@*         <form asp-action="IndexPost"> *@
+@*             <label class="form-label">Id</label> *@
+@*             <input asp-for="Id" class="form-control" type="number" min="1" max="100" required> *@
+@*             <label class="form-label">Name</label> *@
+@*             <input asp-for="Name" class="form-control" type="text" minlength="3" maxlength="20" required> *@
+@*             <label class="form-label">Birthdate</label> *@
+@*             <input asp-for="Date" class="form-control mb-5" type="date" required> *@
+@*             <input class="form-control" type="submit" value="Save the data"> *@
+@*         </form> *@
+@*     </div> *@
+@* } *@
 <a asp-action="Privacy">Privacy</a>
 <h1>Grid</h1>
 <div class="row text-center my-4">
