@@ -3,8 +3,11 @@
     ViewData["Title"] = "Home Page";
 }
 
-<a href="static/page.html">Some static html</a>
-
+<a href="static/page.html">Some static html and some new text</a>
+<img src="https://picsum.photos/200/300" alt="">
+<img src="https://picsum.photos/200/300s" alt=""
+     @* onerror="this.onerror=null; this.src='https://picsum.photos/200/300';" *@
+     >
 <div class="row">
     @foreach (var customer in Model)
     {
@@ -86,3 +89,15 @@
         </div>
     </div>
 </div>
+<script>
+window.addEventListener('DOMContentLoaded', (event) => {
+    let images = document.querySelectorAll("img");
+
+    images.forEach(img => {
+        img.onerror = function() {
+            img.src = "https://picsum.photos/200/300";
+            img.onerror = null; // remove the onerror attribute to prevent loops
+        }
+    });
+});
+</script>

@@ -1,11 +1,17 @@
-﻿@inject ShopService ShopService
+﻿@inject IShopService ShopService
 @page "/"
 @using ShopLibrary
 @using ShopLibrary.Dto
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 <PageTitle>Index</PageTitle>
+<style>
+    .someClass {
+        font: italic bold 0.8em/1.2 Arial, sans-serif;
+    }
+</style>
 
+<p class="testClass">Some text!</p>
 <MudText Typo="Typo.h3" GutterBottom="true">Hello, world!</MudText>
 
 @foreach (var customer in _customers)
